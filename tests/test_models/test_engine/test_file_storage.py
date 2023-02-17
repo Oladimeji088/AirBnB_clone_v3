@@ -3,14 +3,9 @@
 Contains the TestFileStorageDocs classes
 """
 
-
-import inspect
-import json
-import models
-import os
-import pep8
-import unittest
 from datetime import datetime
+import inspect
+import models
 from models.engine import file_storage
 from models.amenity import Amenity
 from models.base_model import BaseModel
@@ -19,6 +14,10 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+import json
+import os
+import pep8
+import unittest
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -67,45 +66,6 @@ test_file_storage.py'])
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
-
-    def test_get_db(self):
-        """Test dbstorage with basic data"""
-        stateObj = State(name="GokuState")
-        stateObj.save()
-        models.storage.save()
-        listObj = list(models.storage.all(State).values())[0].id
-        strObj = str(models.storage.all()['State.' + listObj])
-        self.assertNotEqual(strObj, None)
-
-    def test_classofoutput_get_count_db(self):
-        """Test count dbstorage"""
-        total = (models.storage.count())
-        self.assertEqual(type(total), int)
-        totalState = (models.storage.count(State))
-        self.assertEqual(type(totalState), int)
-        state_id0 = list(models.storage.all(State).values())[0].id
-        classGet = models.storage.get(State, state_id0)
-        self.assertEqual(str(type(classGet)), "<class 'models.state.State'>")
-
-    def test_get_fs(self):
-        """Test fstorage"""
-        stateObj = State(name="GokuState")
-        stateObj.save()
-        failTry = models.storage.get('State', 'failId')
-        self.assertEqual(failTry, None)
-        failTry2 = models.storage.get('failId', stateObj.id)
-        self.assertEqual(failTry2, None)
-
-    def test_count_fs(self):
-        """count fs"""
-        count = models.storage.count()
-        countClass = models.storage.count('State')
-        newState = State(name="GokuState")
-        newState.save()
-        newCount = models.storage.count()
-        newCountClass = models.storage.count('State')
-        self.assertEqual(count + 1, newCount)
-        self.assertEqual(countClass + 1, newCountClass)
 
 
 class TestFileStorage(unittest.TestCase):
